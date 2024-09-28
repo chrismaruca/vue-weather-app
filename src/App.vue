@@ -1,11 +1,16 @@
 <script setup>
 import { ref } from 'vue'
 import SearchInput from './components/SearchField.vue'
+import WeatherCard from './components/WeatherCard.vue'
 
 const locations = ref([])
 
 function addLocation(data) {
   locations.value.push(data)
+}
+
+function deleteLocation(name) {
+  locations.value = locations.value.filter((l) => l.location.name != name)
 }
 </script>
 
@@ -26,8 +31,10 @@ function addLocation(data) {
       <SearchInput @location-data="addLocation" />
     </div>
 
-    <div>
-      <p v-for="location in locations">{{ location.location.name }}</p>
+    <div class="grid grid-cols-2 gap-4">
+      <div v-for="(location, i) in locations" :key="i">
+        <WeatherCard :location="location" @delete-card="deleteLocation" />
+      </div>
     </div>
   </main>
 </template>
